@@ -1,27 +1,22 @@
 package com.utdallas.nxkundu.barrelracegame;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+public class SettingsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        setContentView(R.layout.activity_settings);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.settings_menu_main, menu);
         getMenuInflater().inflate(R.menu.help_menu_main, menu);
         return true;
     }
@@ -46,25 +41,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onClick(View view) {
-
-        switch (view.getId()) {
-
-            case R.id.buttonPlay:
-
-                Intent intentPlayGame = new Intent(this, PlayGameActivity.class);
-                startActivity(intentPlayGame);
-                break;
-
-            case R.id.buttonScore:
-
-                Intent intentScore = new Intent(this, ScoreActivity.class);
-                startActivity(intentScore);
-                break;
-
-        }
     }
 }

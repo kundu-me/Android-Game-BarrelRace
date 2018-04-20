@@ -19,6 +19,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".HelpActivity" />
+        <activity android:name=".SettingsActivity" />
+        <activity android:name=".ScoreActivity" />
+        <activity android:name=".PlayGameActivity"></activity>
     </application>
 
 </manifest>
