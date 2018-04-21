@@ -26,6 +26,8 @@ public class GameSettings {
 
     public static float COURSE_LINE_WIDTH = 15;
 
-    public static float WAIT_TIME_ON_COURSE_TOUCH = 2000;
+    public static float WAIT_ON_COURSE_TOUCH_LONG_TIME = 2000;
+
+    public static float MAX_GAME_LONG_TIME = 60000;
 
 }

@@ -9,3 +9,7 @@ https://www.geeksforgeeks.org/check-two-given-circles-touch-intersect/
 
 INTERSECTION OF CIRCLE AND LINE
 https://www.geeksforgeeks.org/check-line-touches-intersects-circle/
+
+TIMER
+https://examples.javacodegeeks.com/android/core/activity/android-timertask-example/
+http://tekartlife.blogspot.com/2014/04/creating-timer-in-android.html

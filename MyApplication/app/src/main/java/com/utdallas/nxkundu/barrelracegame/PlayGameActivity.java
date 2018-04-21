@@ -9,6 +9,9 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -26,6 +29,10 @@ import com.utdallas.nxkundu.barrelracegame.gamecomponents.GameComponents;
 import com.utdallas.nxkundu.barrelracegame.gamehandler.GameHandler;
 import com.utdallas.nxkundu.barrelracegame.gamesettings.GameSettings;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ConcurrentMap;
 
 public class PlayGameActivity extends AppCompatActivity implements SurfaceHolder.Callback, SensorEventListener, View.OnClickListener {
@@ -44,7 +51,15 @@ public class PlayGameActivity extends AppCompatActivity implements SurfaceHolder
     private Button buttonPlayPause;
     private Button buttonReset;
 
-    private boolean isGameProgress = false;
+    private boolean isGameProgress;
+
+    private long gameStartTimestamp = 0L;
+    private long gameProgressTotalTime = 0L;
+    private long gameProgressCurrentTime = 0L;
+    private long gameProgressTimeBeforePaused = 0L;
+    private boolean stopTimer = false;
+
+    private final Handler handler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -173,10 +188,38 @@ public class PlayGameActivity extends AppCompatActivity implements SurfaceHolder
             long eventTimestamp = event.timestamp;
 
             if(isGameProgress) {
+
                 gameHandler.handleHorseMovement(surfaceViewPlayArea, eventTimestamp, accelerationX, accelerationY, accelerationZ);
             }
         }
     }
+
+    private Runnable updateTimerThread = new Runnable() {
+
+        @Override
+        public void run() {
+
+            gameProgressCurrentTime = SystemClock.uptimeMillis() - gameStartTimestamp;
+
+            gameProgressTotalTime = gameProgressTimeBeforePaused + gameProgressCurrentTime;
+
+            int secs = (int) (gameProgressTotalTime / 1000);
+            int mins = secs / 60;
+            secs = secs % 60;
+            int milliseconds = (int) (gameProgressTotalTime % 1000);
+            String localtime = mins + ":" + String.format("%02d", secs) + "." + String.format("%03d", milliseconds);
+            textViewTimer.setText(localtime);
+
+            if (gameProgressTotalTime >= GameSettings.MAX_GAME_LONG_TIME) {
+
+                stopTimer = true;
+            }
+            if (!stopTimer) {
+                handler.postDelayed(this, 0);
+            }
+        }
+
+    };
 
     @Override
     public void onClick(View view) {
@@ -191,13 +234,19 @@ public class PlayGameActivity extends AppCompatActivity implements SurfaceHolder
                     buttonPlayPause.setText(GameSettings.LABEL_PAUSE);
 
                     sensorManager.registerListener(this, sensorAccelerometer, SensorManager.SENSOR_DELAY_GAME);
+
+                    gameStartTimestamp = SystemClock.uptimeMillis();
+                    handler.postDelayed(updateTimerThread, 0);
                 }
                 else {
 
                     isGameProgress = false;
                     buttonPlayPause.setText(GameSettings.LABEL_PLAY);
-                    
+
                     sensorManager.unregisterListener(this);
+
+                    gameProgressTimeBeforePaused += gameProgressCurrentTime;
+                    handler.removeCallbacks(updateTimerThread);
                 }
 
                 break;

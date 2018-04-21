@@ -71,7 +71,7 @@ public class GameHandler {
          * Wait for WAIT_TIME_ON_COURSE_TOUCH if the course is touched
          */
         if(timeStampCourseTouched != -1
-                && System.currentTimeMillis() - timeStampCourseTouched <= GameSettings.WAIT_TIME_ON_COURSE_TOUCH) {
+                && System.currentTimeMillis() - timeStampCourseTouched <= GameSettings.WAIT_ON_COURSE_TOUCH_LONG_TIME) {
 
             return;
         }
@@ -86,6 +86,7 @@ public class GameHandler {
                     accelerationX, accelerationY, accelerationZ);
 
             mapGameComponents.put(Component.COMPONENT_NAME_HORSE_1, componentHorse);
+
             drawGameComponents(surfaceViewPlayArea.getHolder());
 
             boolean isBarrelTouched = isBarrelTouched();
@@ -147,8 +148,6 @@ public class GameHandler {
 
         float distanceSquare = (x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2);
         float radiusSumSquare = (radius1 + radius2) * (radius1 + radius2);
-
-        //System.out.println(">>>>>>>>>>>>>>> distanceSquare = " + distanceSquare + ", radiusSumSquare=" + radiusSumSquare);
 
         if (distanceSquare < radiusSumSquare) {
             return true;
