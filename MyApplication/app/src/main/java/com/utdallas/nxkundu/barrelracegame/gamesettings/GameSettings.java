@@ -12,6 +12,9 @@ public class GameSettings {
     public static final String LABEL_PAUSE = "Pause";
     public static final String LABEL_RESET = "Reset";
 
+    public static final String FILE_NAME_SCORES = "BarrelRaceScores2.txt";
+    public static final String FILE_NAME_SETTINGS = "BarrelRaceSettings2.txt";
+
     public static float BARREL_RADIUS = 35;
 
     public static float HORSE_RADIUS = 35;

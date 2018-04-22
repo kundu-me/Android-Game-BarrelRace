@@ -5,13 +5,33 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+
+import com.utdallas.nxkundu.barrelracegame.playerinfo.Player;
+import com.utdallas.nxkundu.barrelracegame.scores.Score;
 
 public class ScoreActivity extends AppCompatActivity {
+
+    ListView listViewScores = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_score);
+
+        listViewScores = (ListView) findViewById(R.id.list_scores);
+    }
+
+    @Override
+    protected void onStart() {
+
+        super.onStart();
+
+        Score score = Score.getInstance(this);
+        ListAdapter lstAdapter = new ArrayAdapter<Player>(this, android.R.layout.simple_list_item_1, score.getLstScores());
+        listViewScores.setAdapter(lstAdapter);
     }
 
     @Override

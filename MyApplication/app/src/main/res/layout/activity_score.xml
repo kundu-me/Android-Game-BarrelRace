@@ -6,4 +6,10 @@
     android:layout_height="match_parent"
     tools:context="com.utdallas.nxkundu.barrelracegame.ScoreActivity">
 
+
+    <ListView
+        android:id="@+id/list_scores"
+        android:layout_width="368dp"
+        android:layout_height="495dp" />
+
 </android.support.constraint.ConstraintLayout>

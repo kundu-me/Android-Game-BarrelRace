@@ -8,6 +8,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.utdallas.nxkundu.barrelracegame.scores.Score;
+
+import java.util.HashMap;
+import java.util.TreeMap;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     @Override
@@ -16,6 +21,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        Score score = Score.getInstance(this);
     }
 
     @Override

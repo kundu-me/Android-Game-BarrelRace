@@ -1,6 +1,7 @@
 package com.utdallas.nxkundu.barrelracegame.gamehandler;
 
 import android.graphics.Canvas;
+import android.os.Vibrator;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -29,6 +30,7 @@ public class GameHandler {
 
     private boolean isGameCompleted = false;
     private boolean isBarrelTouched = false;
+    private boolean isCourseTouched = false;
 
     public GameHandler(ConcurrentMap<String, Component> mapGameComponents) {
 
@@ -105,13 +107,14 @@ public class GameHandler {
 
             drawGameComponents(surfaceViewPlayArea.getHolder());
 
-            isBarrelTouched = isAnyBarrelsTouched();
+            isBarrelTouched = isAnyBarrelTouched();
 
             if(isBarrelTouched) {
                 System.out.println(">>>>>>>>>>>>>>>>>>>>>> isBarrelTouched = " + isBarrelTouched);
+                return;
             }
 
-            boolean isCourseTouched = isCourseTouched();
+            isCourseTouched = isAnyCourseTouched();
 
             if(isCourseTouched) {
 
@@ -144,7 +147,7 @@ public class GameHandler {
         }
     }
 
-    private boolean isAnyBarrelsTouched() {
+    private boolean isAnyBarrelTouched() {
 
 
         Component componentHorse = mapGameComponents.get(Component.COMPONENT_NAME_HORSE_1);
@@ -254,7 +257,7 @@ public class GameHandler {
         }
     }
 
-    private boolean isCourseTouched() {
+    private boolean isAnyCourseTouched() {
 
         Component componentHorse = mapGameComponents.get(Component.COMPONENT_NAME_HORSE_1);
         float x1Horse = componentHorse.getX1();
@@ -317,6 +320,14 @@ public class GameHandler {
 
     public boolean isBarrelTouched() {
         return isBarrelTouched;
+    }
+
+    public boolean isCourseTouched() {
+        return isCourseTouched;
+    }
+
+    public long getTimeStampCourseTouched() {
+        return timeStampCourseTouched;
     }
 
     public ConcurrentMap<String, Component> getMapGameComponents() {

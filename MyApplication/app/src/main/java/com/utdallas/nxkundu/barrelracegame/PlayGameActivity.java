@@ -12,6 +12,8 @@ import android.hardware.SensorManager;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -28,6 +30,9 @@ import com.utdallas.nxkundu.barrelracegame.gamecomponents.Component;
 import com.utdallas.nxkundu.barrelracegame.gamecomponents.GameComponents;
 import com.utdallas.nxkundu.barrelracegame.gamehandler.GameHandler;
 import com.utdallas.nxkundu.barrelracegame.gamesettings.GameSettings;
+import com.utdallas.nxkundu.barrelracegame.playerinfo.Player;
+import com.utdallas.nxkundu.barrelracegame.scores.Score;
+import com.utdallas.nxkundu.barrelracegame.util.Util;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -189,19 +194,36 @@ public class PlayGameActivity extends AppCompatActivity implements SurfaceHolder
 
             if(isGameProgress) {
 
+                gameHandler.handleHorseMovement(surfaceViewPlayArea, eventTimestamp, accelerationX, accelerationY, accelerationZ);
+
                 if(gameHandler.isGameCompleted()) {
 
                     stopTimer = true;
                     System.out.println("****[[[[GAME COMPLETED @ " + textViewTimer.getText() + "]]]]********");
+                    isGameProgress = false;
+
+                    String strScore = textViewTimer.getText().toString();
+                    Player player = new Player(strScore);
+                    Score score = Score.getInstance(this);
+                    score.addScore(player);
                 }
                 else if(gameHandler.isBarrelTouched()) {
 
                     stopTimer = true;
                     System.out.println("****[[[[GAME OVER @ " + textViewTimer.getText() + "]]]]********");
+                    Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                    if (vibrator.hasVibrator()) {
+                        vibrator.vibrate(1000);
+                    }
+                    isGameProgress = false;
                 }
-                else {
+                else if((gameHandler.isCourseTouched()) &&
+                        (System.currentTimeMillis() - gameHandler.getTimeStampCourseTouched() < 200)) {
 
-                    gameHandler.handleHorseMovement(surfaceViewPlayArea, eventTimestamp, accelerationX, accelerationY, accelerationZ);
+                    Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                    if (vibrator.hasVibrator()) {
+                        vibrator.vibrate(200);
+                    }
                 }
             }
         }
@@ -216,12 +238,7 @@ public class PlayGameActivity extends AppCompatActivity implements SurfaceHolder
 
             gameProgressTotalTime = gameProgressTimeBeforePaused + gameProgressCurrentTime;
 
-            int secs = (int) (gameProgressTotalTime / 1000);
-            int mins = secs / 60;
-            secs = secs % 60;
-            int milliseconds = (int) (gameProgressTotalTime % 1000);
-            String localtime = mins + ":" + String.format("%02d", secs) + "." + String.format("%03d", milliseconds);
-            textViewTimer.setText(localtime);
+            textViewTimer.setText(Util.getUserReadableTime(gameProgressTotalTime));
 
             if (gameProgressTotalTime >= GameSettings.MAX_GAME_LONG_TIME) {
 
