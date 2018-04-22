@@ -12,6 +12,12 @@ public class GameSettings {
     public static final String LABEL_PAUSE = "Pause";
     public static final String LABEL_RESET = "Reset";
 
+    public static final String LABEL_PLAYER_SCORE = "PlayerScore";
+
+    public static final String ERR_PLAYER_NAME = "Please Enter the Player Name";
+
+    public static final String LABEL_SAVED_SUCCESSFULLY = "Saved Successfully";
+
     public static final String FILE_NAME_SCORES = "BarrelRaceScores2.txt";
     public static final String FILE_NAME_SETTINGS = "BarrelRaceSettings2.txt";
 
@@ -36,5 +42,7 @@ public class GameSettings {
     public static float WAIT_ON_COURSE_TOUCH_LONG_TIME = 2000;
 
     public static float MAX_GAME_LONG_TIME = 60000;
+
+    public static final int MAX_COUNT_SCORES = 10;
 
 }

@@ -17,7 +17,6 @@ public class HelpActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.settings_menu_main, menu);
         return true;
     }
 
@@ -29,16 +28,6 @@ public class HelpActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.app_settings) {
-
-            Intent intent = new Intent(this, SettingsActivity.class);
-            startActivity(intent);
-        }
-        else if(id == R.id.app_help) {
-
-            Intent intent = new Intent(this, HelpActivity.class);
-            startActivity(intent);
-        }
 
         return super.onOptionsItemSelected(item);
     }

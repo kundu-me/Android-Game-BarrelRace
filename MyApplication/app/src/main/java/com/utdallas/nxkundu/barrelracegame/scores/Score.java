@@ -105,7 +105,9 @@ public class Score {
 
             BufferedWriter objBufferedWriter = new BufferedWriter(new OutputStreamWriter(objFileOutputStream));
 
-            for (Player player : lstScores) {
+            for (int index = 0; index < GameSettings.MAX_COUNT_SCORES && index < lstScores.size(); index++) {
+
+                Player player = lstScores.get(index);
 
                 objBufferedWriter.write(player.toLine());
                 objBufferedWriter.newLine();
@@ -128,14 +130,6 @@ public class Score {
     private void rankPlayers() {
 
         Collections.sort(lstScores);
-
-        int rank = 1;
-
-        for(Player player : lstScores) {
-
-            player.setRank(rank);
-            rank ++;
-        }
     }
 
     private void createFileIfNotExists()  {
@@ -156,6 +150,32 @@ public class Score {
         catch(Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public int getPlayerRank(Player player) {
+
+        int index = 0;
+
+        for(index = 0; index < lstScores.size(); index++) {
+
+            if(lstScores.get(index).getId().equalsIgnoreCase(player.getId())) {
+                return index + 1;
+            }
+        }
+
+        return index+1;
+    }
+
+    public void updatePlayer(int rank, Player player) {
+
+        Player savedPlayer = lstScores.get(rank - 1);
+
+        if(savedPlayer.getId().equalsIgnoreCase(player.getId())) {
+
+            savedPlayer.setPlayerName(player.getPlayerName());
+        }
+
+        writeScores();
     }
 
     public List<Player> getLstScores() {

@@ -5,4 +5,27 @@
     <string name="button_play">Play</string>
     <string name="button_pause">Pause</string>
     <string name="button_reset">Reset</string>
+    <string name="label_rank">Rank</string>
+    <string name="label_score">Time</string>
+    <string name="label_player">Player Name</string>
+    <string name="success">You Won !</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="default_player_name">Player</string>
+    <string name="label_horse_color">Horse Color</string>
+    <string name="label_barrel_color">Barrel Color</string>
+    <string name="label_game_level">Game Level</string>
+
+    <string name="label_game_level_easy">Easy</string>
+    <string name="label_game_level_medium">Medium</string>
+    <string name="label_game_level_difficult">Difficult</string>
+
+    <string name="color_yellow">Yellow</string>
+    <string name="color_green">Green</string>
+    <string name="color_magneta">Magneta</string>
+
+    <string name="color_red">Red</string>
+    <string name="color_blue">Blue</string>
+    <string name="color_white">White</string>
+
 </resources>

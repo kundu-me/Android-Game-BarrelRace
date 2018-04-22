@@ -8,20 +8,25 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
 
 import com.utdallas.nxkundu.barrelracegame.playerinfo.Player;
 import com.utdallas.nxkundu.barrelracegame.scores.Score;
 
+import java.util.List;
+
 public class ScoreActivity extends AppCompatActivity {
 
-    ListView listViewScores = null;
+    TableLayout tableViewScores = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_score);
 
-        listViewScores = (ListView) findViewById(R.id.list_scores);
+        tableViewScores = (TableLayout) findViewById(R.id.table_view_scores);
     }
 
     @Override
@@ -30,15 +35,47 @@ public class ScoreActivity extends AppCompatActivity {
         super.onStart();
 
         Score score = Score.getInstance(this);
-        ListAdapter lstAdapter = new ArrayAdapter<Player>(this, android.R.layout.simple_list_item_1, score.getLstScores());
-        listViewScores.setAdapter(lstAdapter);
+        List<Player> lstScores = score.getLstScores();
+
+        int rank = 0;
+        for(Player player : lstScores) {
+
+            ++rank;
+
+            TableRow tr = new TableRow(ScoreActivity.this);
+            tr.setLayoutParams(new TableLayout.LayoutParams(
+                    TableLayout.LayoutParams.WRAP_CONTENT,
+                    TableLayout.LayoutParams.WRAP_CONTENT));
+
+            TextView textViewRank = new TextView(this);
+            textViewRank.setText(String.valueOf(rank));
+            textViewRank.setWidth(80);
+            textViewRank.setPadding(0, 10, 0, 10);
+            textViewRank.setTextSize(20);
+            tr.addView(textViewRank);
+
+            TextView textViewScore = new TextView(this);
+            textViewScore.setText(player.getScore());
+            textViewScore.setWidth(120);
+            textViewScore.setPadding(0, 10, 0, 10);
+            textViewScore.setTextSize(20);
+            tr.addView(textViewScore);
+
+            TextView textViewPlayerName = new TextView(this);
+            textViewPlayerName.setText(player.getPlayerName());
+            textViewPlayerName.setWidth(180);
+            textViewPlayerName.setPadding(0, 10, 0, 10);
+            textViewPlayerName.setTextSize(20);
+            tr.addView(textViewPlayerName);
+
+            tableViewScores.addView(tr);
+        }
+
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.settings_menu_main, menu);
-        getMenuInflater().inflate(R.menu.help_menu_main, menu);
         return true;
     }
 
@@ -50,16 +87,6 @@ public class ScoreActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.app_settings) {
-
-            Intent intent = new Intent(this, SettingsActivity.class);
-            startActivity(intent);
-        }
-        else if(id == R.id.app_help) {
-
-            Intent intent = new Intent(this, HelpActivity.class);
-            startActivity(intent);
-        }
 
         return super.onOptionsItemSelected(item);
     }

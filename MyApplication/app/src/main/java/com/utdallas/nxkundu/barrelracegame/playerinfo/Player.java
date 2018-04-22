@@ -3,7 +3,7 @@ package com.utdallas.nxkundu.barrelracegame.playerinfo;
 import com.utdallas.nxkundu.barrelracegame.util.Util;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.util.UUID;
 
 /**
  * Created by nxkundu on 4/21/18.
@@ -12,7 +12,7 @@ import java.util.Date;
 public class Player implements Serializable, Comparable<Player>{
 
     public static final String DEFAULT_PLAYER_NAME = "Player";
-    private int rank;
+    private String id;
     private String score;
     private String playerName;
     private String playerDate;
@@ -20,6 +20,7 @@ public class Player implements Serializable, Comparable<Player>{
     public Player(String score) {
         super();
 
+        this.id = UUID.randomUUID().toString();
         this.score = score;
         this.playerName = DEFAULT_PLAYER_NAME;
         this.playerDate = Util.getDate();
@@ -29,6 +30,7 @@ public class Player implements Serializable, Comparable<Player>{
     public Player(String score, String playerName, String playerDate) {
         super();
 
+        this.id = UUID.randomUUID().toString();
         this.score = score;
         this.playerName = playerName;
         this.playerDate = playerDate;
@@ -36,12 +38,12 @@ public class Player implements Serializable, Comparable<Player>{
 
     @Override
     public int compareTo(Player obj) {
-        return (obj.score).compareTo(this.score);
+        return (this.score).compareTo(obj.score);
     }
 
     @Override
     public String toString() {
-        return  rank + "\t" + score + "\t" + playerName;
+        return  score + "\t" + playerName;
     }
 
     public String toLine() {
@@ -72,11 +74,11 @@ public class Player implements Serializable, Comparable<Player>{
         this.playerDate = playerDate;
     }
 
-    public int getRank() {
-        return rank;
+    public String getId() {
+        return id;
     }
 
-    public void setRank(int rank) {
-        this.rank = rank;
+    public void setId(String id) {
+        this.id = id;
     }
 }

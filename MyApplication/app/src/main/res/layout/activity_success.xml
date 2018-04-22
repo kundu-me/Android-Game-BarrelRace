@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.utdallas.nxkundu.barrelracegame.SuccessActivity">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:text="@string/success"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textAlignment="center"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+        <TextView
+            android:id="@+id/textViewSuccessRankLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:text="@string/label_rank"
+            android:layout_marginLeft="30dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
+
+        <TextView
+            android:id="@+id/textViewSuccessRankValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:layout_alignParentRight="true"
+            android:layout_marginEnd="30dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:text=""
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+        <TextView
+            android:id="@+id/textViewSuccessScoreLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:text="@string/label_score"
+            android:layout_marginLeft="30dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
+
+        <TextView
+            android:id="@+id/textViewSuccessScoreValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:layout_alignParentRight="true"
+            android:layout_marginEnd="30dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:text=""
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
+
+    <EditText
+        android:id="@+id/textViewSuccessPlayerValue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text=""
+        android:hint="@string/label_player"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:text=""
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:textAlignment="center">
+        <Button
+            android:id="@+id/button_save"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:text="@string/save"
+            android:onClick="onClick"
+            android:layout_marginStart="70dp"/>
+
+        <Button
+            android:id="@+id/button_cancel"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:text="@string/cancel"
+            android:layout_marginEnd="70dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:onClick="onClick"
+            android:layout_alignParentBottom="true" />
+    </RelativeLayout>
+
+</LinearLayout>
