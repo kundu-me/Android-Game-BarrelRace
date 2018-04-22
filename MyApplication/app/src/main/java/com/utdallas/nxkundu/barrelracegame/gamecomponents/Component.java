@@ -8,6 +8,9 @@ import android.graphics.PorterDuffXfermode;
 
 import com.utdallas.nxkundu.barrelracegame.gamesettings.GameSettings;
 
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+
 /**
  * Created by nxkundu on 4/20/18.
  */
@@ -85,7 +88,7 @@ public class Component {
 
             case COMPONENT_TYPE_COURSE:
                 paint.setColor(GameSettings.COURSE_COLOR);
-
+                break;
         }
 
 
@@ -102,11 +105,6 @@ public class Component {
                 canvas.drawCircle(x1, y1, radius, paint);
                 break;
         }
-    }
-
-    public void reDrawComponent(Canvas canvas) {
-
-
     }
 
     public float getX1() {

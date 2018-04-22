@@ -7,6 +7,7 @@ import android.view.SurfaceView;
 import com.utdallas.nxkundu.barrelracegame.gamecomponents.Component;
 import com.utdallas.nxkundu.barrelracegame.gamesettings.GameSettings;
 
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 /**
@@ -17,12 +18,23 @@ public class GameHandler {
 
     private ConcurrentMap<String, Component> mapGameComponents;
 
+    private ConcurrentMap<String, Long> mapBarrelBoundaryCrossed;
+
     private long timeStampCourseTouched = -1;
+
+    public static final String DIRECTION_EAST = "EAST";
+    public static final String DIRECTION_WEST = "WEST";
+    public static final String DIRECTION_NORTH = "NORTH";
+    public static final String DIRECTION_SOUTH = "SOUTH";
+
+    private boolean isGameCompleted = false;
+    private boolean isBarrelTouched = false;
 
     public GameHandler(ConcurrentMap<String, Component> mapGameComponents) {
 
         super();
         this.mapGameComponents = mapGameComponents;
+        this.mapBarrelBoundaryCrossed = new ConcurrentHashMap<>();
     }
 
     public void drawComponents(Canvas canvas) {
@@ -67,6 +79,9 @@ public class GameHandler {
     public void handleHorseMovement(SurfaceView surfaceViewPlayArea,
                                     long eventTimestamp, float accelerationX, float accelerationY, float accelerationZ) {
 
+        if(isGameCompleted || isBarrelTouched) {
+            return;
+        }
         /**
          * Wait for WAIT_TIME_ON_COURSE_TOUCH if the course is touched
          */
@@ -75,6 +90,7 @@ public class GameHandler {
 
             return;
         }
+
 
         Component componentHorse = mapGameComponents.get(Component.COMPONENT_NAME_HORSE_1);
 
@@ -89,7 +105,7 @@ public class GameHandler {
 
             drawGameComponents(surfaceViewPlayArea.getHolder());
 
-            boolean isBarrelTouched = isBarrelTouched();
+            isBarrelTouched = isAnyBarrelsTouched();
 
             if(isBarrelTouched) {
                 System.out.println(">>>>>>>>>>>>>>>>>>>>>> isBarrelTouched = " + isBarrelTouched);
@@ -106,10 +122,29 @@ public class GameHandler {
 
                 timeStampCourseTouched = -1;
             }
+
+            if(mapBarrelBoundaryCrossed.size() == 12) {
+
+                System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>COMPLETED 3 Barrel circle ****** " + mapBarrelBoundaryCrossed.keySet());
+
+                if((componentHorse.getY1() + componentHorse.getRadius() >= componentHorse.getYMax())
+                    && (componentHorse.getX1() >= componentHorse.getXMax()/2 - 50 )
+                    && (componentHorse.getX1() <= componentHorse.getXMax()/2 + 50 )) {
+
+                    isGameCompleted = true;
+                    System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>GAME COMPLETED <<<<<<<<<<<<<<<");
+                }
+
+            }
+            else {
+
+                updateMapBarrelBoundaryCrossed();
+                System.out.println(mapBarrelBoundaryCrossed.keySet());
+            }
         }
     }
 
-    private boolean isBarrelTouched() {
+    private boolean isAnyBarrelsTouched() {
 
 
         Component componentHorse = mapGameComponents.get(Component.COMPONENT_NAME_HORSE_1);
@@ -141,6 +176,68 @@ public class GameHandler {
         }
 
         return false;
+    }
+
+    private void updateMapBarrelBoundaryCrossed() {
+
+        checkBarrelBoundaryCrossed(Component.COMPONENT_NAME_BARREL_1);
+        checkBarrelBoundaryCrossed(Component.COMPONENT_NAME_BARREL_2);
+        checkBarrelBoundaryCrossed(Component.COMPONENT_NAME_BARREL_3);
+    }
+
+    private void checkBarrelBoundaryCrossed(String componentNameBarrel) {
+
+        Component componentHorse = mapGameComponents.get(Component.COMPONENT_NAME_HORSE_1);
+        float x1Horse = componentHorse.getX1();
+        float y1Horse = componentHorse.getY1();
+
+        Component barrel = mapGameComponents.get(componentNameBarrel);
+        float x1Barrel = barrel.getX1();
+        float y1Barrel = barrel.getY1();
+
+        /**
+         * EAST
+         */
+        if((!mapBarrelBoundaryCrossed.containsKey(componentNameBarrel + DIRECTION_EAST))
+                && (Math.abs(y1Horse - y1Barrel) <= GameSettings.BARREL_BOUNDARY_MIN_DISTANCE)
+                && (Math.abs(x1Horse - x1Barrel) <= GameSettings.BARREL_BOUNDARY_RADIUS)
+                && (x1Horse < x1Barrel)) {
+
+            mapBarrelBoundaryCrossed.put(componentNameBarrel + DIRECTION_EAST, System.currentTimeMillis());
+        }
+
+        /**
+         * WEST
+         */
+        if((!mapBarrelBoundaryCrossed.containsKey(componentNameBarrel + DIRECTION_WEST))
+                && (Math.abs(y1Horse - y1Barrel) <= GameSettings.BARREL_BOUNDARY_MIN_DISTANCE)
+                && (Math.abs(x1Horse - x1Barrel) <= GameSettings.BARREL_BOUNDARY_RADIUS)
+                && (x1Horse > x1Barrel)) {
+
+            mapBarrelBoundaryCrossed.put(componentNameBarrel + DIRECTION_WEST, System.currentTimeMillis());
+        }
+        /**
+         * NORTH
+         */
+        if((!mapBarrelBoundaryCrossed.containsKey(componentNameBarrel + DIRECTION_NORTH))
+                && (Math.abs(x1Horse - x1Barrel) <= GameSettings.BARREL_BOUNDARY_MIN_DISTANCE)
+                && (Math.abs(y1Horse - y1Barrel) <= GameSettings.BARREL_BOUNDARY_RADIUS)
+                && (y1Horse < y1Barrel)) {
+
+            mapBarrelBoundaryCrossed.put(componentNameBarrel + DIRECTION_NORTH, System.currentTimeMillis());
+        }
+
+        /**
+         * SOUTH
+         */
+        if((!mapBarrelBoundaryCrossed.containsKey(componentNameBarrel + DIRECTION_SOUTH))
+                && (Math.abs(x1Horse - x1Barrel) <= GameSettings.BARREL_BOUNDARY_MIN_DISTANCE)
+                && (Math.abs(y1Horse - y1Barrel) <= GameSettings.BARREL_BOUNDARY_RADIUS)
+                && (y1Horse > y1Barrel)) {
+
+            mapBarrelBoundaryCrossed.put(componentNameBarrel + DIRECTION_SOUTH, System.currentTimeMillis());
+        }
+
     }
 
     private boolean isCirclesIntersect(float x1, float y1, float x2, float y2,
@@ -214,9 +311,12 @@ public class GameHandler {
         return false;
     }
 
-    private boolean isCircleLineIntersect() {
+    public boolean isGameCompleted() {
+        return isGameCompleted;
+    }
 
-        return false;
+    public boolean isBarrelTouched() {
+        return isBarrelTouched;
     }
 
     public ConcurrentMap<String, Component> getMapGameComponents() {

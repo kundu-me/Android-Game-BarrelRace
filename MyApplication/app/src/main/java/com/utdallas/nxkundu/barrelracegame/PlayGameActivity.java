@@ -189,7 +189,20 @@ public class PlayGameActivity extends AppCompatActivity implements SurfaceHolder
 
             if(isGameProgress) {
 
-                gameHandler.handleHorseMovement(surfaceViewPlayArea, eventTimestamp, accelerationX, accelerationY, accelerationZ);
+                if(gameHandler.isGameCompleted()) {
+
+                    stopTimer = true;
+                    System.out.println("****[[[[GAME COMPLETED @ " + textViewTimer.getText() + "]]]]********");
+                }
+                else if(gameHandler.isBarrelTouched()) {
+
+                    stopTimer = true;
+                    System.out.println("****[[[[GAME OVER @ " + textViewTimer.getText() + "]]]]********");
+                }
+                else {
+
+                    gameHandler.handleHorseMovement(surfaceViewPlayArea, eventTimestamp, accelerationX, accelerationY, accelerationZ);
+                }
             }
         }
     }
@@ -254,7 +267,6 @@ public class PlayGameActivity extends AppCompatActivity implements SurfaceHolder
             case R.id.buttonReset:
 
                 Intent intentScore = new Intent(this, PlayGameActivity.class);
-                finish();
                 startActivity(intentScore);
                 break;
 

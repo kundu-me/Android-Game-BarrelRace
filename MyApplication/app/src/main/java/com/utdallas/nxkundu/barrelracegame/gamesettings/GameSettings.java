@@ -16,6 +16,10 @@ public class GameSettings {
 
     public static float HORSE_RADIUS = 35;
 
+    public static float BARREL_BOUNDARY_RADIUS = BARREL_RADIUS + HORSE_RADIUS + 150;
+
+    public static float BARREL_BOUNDARY_MIN_DISTANCE = 5;
+
     public static int BARREL_COLOR = Color.RED;
 
     public static int HORSE_COLOR = Color.GREEN;
