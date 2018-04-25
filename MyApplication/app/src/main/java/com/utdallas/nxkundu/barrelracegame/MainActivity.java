@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
 
     private DisplayMetrics displayMetrics;
 
+    private TextView textViewProgress;
     private TextView textViewTimer;
 
     private GameHandler gameHandler;
@@ -77,6 +78,8 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         surfaceViewPlayArea = (SurfaceView) findViewById(R.id.play_area);
         surfaceViewPlayArea.getHolder().addCallback(this);
 
+        textViewProgress = (TextView) findViewById(R.id.textViewProgress);
+
         textViewTimer = (TextView) findViewById(R.id.textViewTimer);
 
         buttonPlayPause = (Button) findViewById(R.id.buttonPlayPause);
@@ -92,6 +95,8 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         gameHandler = new GameHandler(mapGameComponents);
 
         ReadWriteGameSettings.getInstance(this).readGameSettings();
+
+        textViewProgress.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -204,9 +209,14 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
 
                 gameHandler.handleHorseMovement(surfaceViewPlayArea, eventTimestamp, accelerationX, accelerationY, accelerationZ);
 
+                updateGameProgress(gameHandler.getGameProgressPercentage());
+
                 if(gameHandler.isGameCompleted()) {
 
                     stopTimer = true;
+
+                    updateGameProgress(100);
+
                     System.out.println("****[[[[GAME COMPLETED @ " + textViewTimer.getText() + "]]]]********");
                     isGameProgress = false;
 
@@ -238,6 +248,11 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
                 }
             }
         }
+    }
+
+    private void updateGameProgress(int gameProgressPercentage) {
+
+        textViewProgress.setText("" + gameProgressPercentage + "% Completed");
     }
 
     private Runnable updateTimerThread = new Runnable() {
@@ -273,6 +288,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
 
                     isGameProgress = true;
                     buttonPlayPause.setText(GameSettings.LABEL_PAUSE);
+                    textViewProgress.setVisibility(View.VISIBLE);
 
                     sensorManager.registerListener(this, sensorAccelerometer, SensorManager.SENSOR_DELAY_GAME);
 

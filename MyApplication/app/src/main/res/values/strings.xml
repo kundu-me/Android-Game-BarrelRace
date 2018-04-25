@@ -28,4 +28,6 @@
     <string name="color_blue">Blue</string>
     <string name="color_white">White</string>
 
+    <string name="label_game_progress">1% Completed</string>
+
 </resources>

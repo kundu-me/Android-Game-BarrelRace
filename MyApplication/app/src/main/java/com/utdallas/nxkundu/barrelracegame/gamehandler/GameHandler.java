@@ -368,4 +368,13 @@ public class GameHandler {
     public void setMapGameComponents(ConcurrentMap<String, Component> mapGameComponents) {
         this.mapGameComponents = mapGameComponents;
     }
+
+    public int getGameProgressPercentage() {
+
+        int countBarrelBoundaryCrossed = mapBarrelBoundaryCrossed.size();
+        int percentageBarrelBoundaryCrossed = (int) (countBarrelBoundaryCrossed * 100) / 13;
+
+        percentageBarrelBoundaryCrossed = (percentageBarrelBoundaryCrossed < 1) ? 1 : percentageBarrelBoundaryCrossed;
+        return percentageBarrelBoundaryCrossed;
+    }
 }

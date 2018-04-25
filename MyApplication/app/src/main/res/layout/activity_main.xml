@@ -42,6 +42,16 @@
             android:onClick="onClick"
             android:text="@string/button_reset" />
 
+        <TextView
+            android:id="@+id/textViewProgress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="40dp"
+            android:width="110dp"
+            android:layout_toEndOf="@+id/buttonPlayPause"
+            android:text="@string/label_game_progress" />
+
     </RelativeLayout>
 
     <SurfaceView
