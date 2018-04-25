@@ -35,6 +35,9 @@ public class GameSettings {
 
     public static int COURSE_COLOR = Color.RED;
 
+    public static int BACKGROUND_COLOR = Color.BLACK;
+    public static int BARREL_COLOR_COMPLETED = Color.WHITE;
+
     public static float ACCELEROMETER_RATE = 1.45f;
 
     public static float COURSE_LINE_WIDTH = 15;

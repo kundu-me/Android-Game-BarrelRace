@@ -374,4 +374,5 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
                 })
                 .show();
     }
+    
 }

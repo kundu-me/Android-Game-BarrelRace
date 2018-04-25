@@ -23,7 +23,8 @@ public class Component {
     public static final String COMPONENT_TYPE_HORSE = "HORSE";
     public static final String COMPONENT_TYPE_BARREL = "BARREL";
     public static final String COMPONENT_TYPE_COURSE = "COURSE";
-    public static final String COMPONENT_TYPE_PLAY_AREA = "PLAY_AREA";
+
+    public static final String COMPONENT_SETTINGS_BARREL_ROUND_COMPLETED = "BARREL_ROUND_COMPLETED";
 
     public static final String COMPONENT_NAME_HORSE_1 = "HORSE_1";
 
@@ -36,6 +37,8 @@ public class Component {
     public static final String COMPONENT_NAME_COURSE_LEFT = "COURSE_LEFT";
     public static final String COMPONENT_NAME_COURSE_RIGHT = "COURSE_RIGHT";
     public static final String COMPONENT_NAME_COURSE_TOP = "COURSE_TOP";
+
+    private ConcurrentMap<String, Integer> mapComponentSettings;
 
     private String componentType;
     private String componentShape;
@@ -68,6 +71,8 @@ public class Component {
         this.componentShape = componentShape;
         this.componentName = componentName;
 
+        this.mapComponentSettings = new ConcurrentHashMap<>();
+
         this.timeLastUpdated = System.currentTimeMillis();
     }
 
@@ -79,7 +84,15 @@ public class Component {
         switch (this.componentType) {
 
             case COMPONENT_TYPE_BARREL:
-                paint.setColor(GameSettings.BARREL_COLOR);
+
+                if (mapComponentSettings.containsKey(COMPONENT_SETTINGS_BARREL_ROUND_COMPLETED)
+                        && mapComponentSettings.get(COMPONENT_SETTINGS_BARREL_ROUND_COMPLETED) == 4) {
+
+                    paint.setColor(GameSettings.BARREL_COLOR_COMPLETED);
+                }
+                else{
+                    paint.setColor(GameSettings.BARREL_COLOR);
+                }
                 break;
 
             case COMPONENT_TYPE_HORSE:
@@ -269,5 +282,29 @@ public class Component {
         point = point < pointMin ? pointMin : point;
         point = point > pointMax ? pointMax : point;
         return point;
+    }
+
+    public ConcurrentMap<String, Integer> getMapComponentSettings() {
+        return mapComponentSettings;
+    }
+
+    public void setMapComponentSettings(ConcurrentMap<String, Integer> mapComponentSettings) {
+        this.mapComponentSettings = mapComponentSettings;
+    }
+
+    public float getxMax() {
+        return xMax;
+    }
+
+    public void setxMax(float xMax) {
+        this.xMax = xMax;
+    }
+
+    public float getyMax() {
+        return yMax;
+    }
+
+    public void setyMax(float yMax) {
+        this.yMax = yMax;
     }
 }

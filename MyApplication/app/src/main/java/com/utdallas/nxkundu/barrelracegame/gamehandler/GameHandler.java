@@ -1,6 +1,7 @@
 package com.utdallas.nxkundu.barrelracegame.gamehandler;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.os.Vibrator;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -63,6 +64,7 @@ public class GameHandler {
         try {
 
             canvas = surfaceHolder.lockCanvas();
+            canvas.drawColor(GameSettings.BACKGROUND_COLOR);
 
             if (canvas != null) {
 
@@ -198,6 +200,8 @@ public class GameHandler {
         float x1Barrel = barrel.getX1();
         float y1Barrel = barrel.getY1();
 
+        boolean isAnyBarrelBoundaryCrossed = false;
+
         /**
          * EAST
          */
@@ -207,6 +211,8 @@ public class GameHandler {
                 && (x1Horse < x1Barrel)) {
 
             mapBarrelBoundaryCrossed.put(componentNameBarrel + DIRECTION_EAST, System.currentTimeMillis());
+
+            isAnyBarrelBoundaryCrossed = true;
         }
 
         /**
@@ -218,6 +224,8 @@ public class GameHandler {
                 && (x1Horse > x1Barrel)) {
 
             mapBarrelBoundaryCrossed.put(componentNameBarrel + DIRECTION_WEST, System.currentTimeMillis());
+
+            isAnyBarrelBoundaryCrossed = true;
         }
         /**
          * NORTH
@@ -228,6 +236,8 @@ public class GameHandler {
                 && (y1Horse < y1Barrel)) {
 
             mapBarrelBoundaryCrossed.put(componentNameBarrel + DIRECTION_NORTH, System.currentTimeMillis());
+
+            isAnyBarrelBoundaryCrossed = true;
         }
 
         /**
@@ -239,8 +249,29 @@ public class GameHandler {
                 && (y1Horse > y1Barrel)) {
 
             mapBarrelBoundaryCrossed.put(componentNameBarrel + DIRECTION_SOUTH, System.currentTimeMillis());
+
+            isAnyBarrelBoundaryCrossed = true;
         }
 
+        /**
+         * UPDATE COUNT NUMBER OF POSITION CROSSED
+         */
+        if(isAnyBarrelBoundaryCrossed) {
+
+            updateCountBarrelCompleted(barrel);
+        }
+
+    }
+
+    private void updateCountBarrelCompleted(Component barrel) {
+
+        int countBarrelCompleted = 0;
+        if(barrel.getMapComponentSettings() != null
+                && barrel.getMapComponentSettings().containsKey(Component.COMPONENT_SETTINGS_BARREL_ROUND_COMPLETED)) {
+            countBarrelCompleted = barrel.getMapComponentSettings().get(Component.COMPONENT_SETTINGS_BARREL_ROUND_COMPLETED);
+        }
+
+        barrel.getMapComponentSettings().put(Component.COMPONENT_SETTINGS_BARREL_ROUND_COMPLETED, ++countBarrelCompleted);
     }
 
     private boolean isCirclesIntersect(float x1, float y1, float x2, float y2,

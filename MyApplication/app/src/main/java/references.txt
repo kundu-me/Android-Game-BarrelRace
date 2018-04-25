@@ -13,3 +13,6 @@ https://www.geeksforgeeks.org/check-line-touches-intersects-circle/
 TIMER
 https://examples.javacodegeeks.com/android/core/activity/android-timertask-example/
 http://tekartlife.blogspot.com/2014/04/creating-timer-in-android.html
+
+REDRAW
+https://stackoverflow.com/questions/5729377/android-canvas-how-do-i-clear-delete-contents-of-a-canvas-bitmaps-livin
