@@ -135,5 +135,6 @@ public class SuccessActivity extends AppCompatActivity implements View.OnClickLi
 
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+        this.finish();
     }
 }

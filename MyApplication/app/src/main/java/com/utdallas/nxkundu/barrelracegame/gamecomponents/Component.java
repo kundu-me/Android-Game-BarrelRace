@@ -96,6 +96,9 @@ public class Component {
         this.mapComponentSettings = new ConcurrentHashMap<>();
 
         this.timeLastUpdated = System.currentTimeMillis();
+
+        paint = new Paint();
+        paint.setAntiAlias(true);
     }
 
     /**************************************************************************
@@ -105,9 +108,6 @@ public class Component {
      * and the position values passed
      **************************************************************************/
     public void drawComponent(Canvas canvas) {
-
-        paint = new Paint();
-        paint.setAntiAlias(true);
 
         switch (this.componentType) {
 
@@ -121,6 +121,7 @@ public class Component {
                 else{
                     paint.setColor(GameSettings.BARREL_COLOR);
                 }
+
                 break;
 
             case COMPONENT_TYPE_HORSE:

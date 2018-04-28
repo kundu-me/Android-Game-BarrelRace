@@ -433,6 +433,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
             else {
 
                 // Game is Paused
+                //System.out.println("Game is Paused");
             }
         }
 

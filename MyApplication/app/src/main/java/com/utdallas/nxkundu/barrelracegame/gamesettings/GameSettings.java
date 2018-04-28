@@ -52,7 +52,7 @@ public class GameSettings {
 
     public static int BACKGROUND_COLOR = Color.BLACK;
 
-    public static int BARREL_COLOR_COMPLETED = Color.WHITE;
+    public static int BARREL_COLOR_COMPLETED = Color.rgb(254, 252, 208);
 
     public static float ACCELEROMETER_RATE = 1.45f;
 
