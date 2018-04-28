@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
     private long gameProgressTotalTime = 0L;
     private long gameProgressCurrentTime = 0L;
     private long gameProgressTimeBeforePaused = 0L;
-    private boolean stopTimer = false;
+    private boolean pauseTimer = false;
 
     AlertDialog alertDialogGamePaused = null;
 
@@ -302,28 +302,6 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         }
     }
 
-    /**************************************************************************
-     * Method
-     *
-     * resumeGameThread
-     *
-     * Resumes the Game automatically
-     *
-     **************************************************************************/
-    private Runnable resumeGameThread = new Runnable() {
-
-        @Override
-        public void run() {
-
-            if(alertDialogGamePaused != null) {
-
-                alertDialogGamePaused.cancel();
-                gamePlayorResume();
-            }
-        }
-
-    };
-
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
     }
@@ -359,7 +337,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
 
                 if(gameHandler.isGameCompleted()) {
 
-                    stopTimer = true;
+                    pauseTimer = true;
 
                     updateGameProgress(100);
 
@@ -374,7 +352,8 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
                 }
                 else if(gameHandler.isBarrelTouched()) {
 
-                    stopTimer = true;
+                    pauseTimer = true;
+
                     System.out.println("****[[[[GAME OVER @ " + textViewTimer.getText() + "]]]]********");
                     Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
                     if (vibrator.hasVibrator()) {
@@ -410,6 +389,28 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
     /**************************************************************************
      * Method
      *
+     * resumeGameThread
+     *
+     * Resumes the Game automatically
+     *
+     **************************************************************************/
+    private Runnable resumeGameThread = new Runnable() {
+
+        @Override
+        public void run() {
+
+            if(alertDialogGamePaused != null) {
+
+                alertDialogGamePaused.cancel();
+                gamePlayorResume();
+            }
+        }
+
+    };
+
+    /**************************************************************************
+     * Method
+     *
      * Updates the clock
      * on the bottom of the screen
      * as the Game is in progress
@@ -425,12 +426,13 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
 
             textViewTimer.setText(Util.getUserReadableTime(gameProgressTotalTime));
 
-            if (gameProgressTotalTime >= GameSettings.MAX_GAME_LONG_TIME) {
+            if (pauseTimer == false) {
 
-                stopTimer = true;
-            }
-            if (!stopTimer) {
                 handler.postDelayed(this, 0);
+            }
+            else {
+
+                // Game is Paused
             }
         }
 
@@ -544,7 +546,8 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         gameProgressTotalTime = 0L;
         gameProgressCurrentTime = 0L;
         gameProgressTimeBeforePaused = 0L;
-        stopTimer = false;
+
+        pauseTimer = false;
 
         textViewTimer.setText("00:00.000");
 

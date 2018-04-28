@@ -1,0 +1,14 @@
+# Android-Game-BarrelRace
+Human Computer Interactions Course Final Project
+
+SensorManager
+https://developer.android.com/reference/android/hardware/SensorManager.html
+
+INTERSECTION OF CIRCLES
+https://www.geeksforgeeks.org/check-two-given-circles-touch-intersect/
+
+INTERSECTION OF CIRCLE AND LINE
+https://www.geeksforgeeks.org/check-line-touches-intersects-circle/
+
+TIMER, Auto Resume Game
+https://developer.android.com/reference/android/os/Handler
