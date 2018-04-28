@@ -17,11 +17,25 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.TreeMap;
 
 /**
  * Created by nxkundu on 4/21/18.
  */
+/******************************************************************************
+ * Barrel Race Game
+ * This is an Android Game Application
+ *
+ * This class
+ * READ
+ * WRITE
+ * the user Top 10 Score
+ *
+ * Everytime a user completes the Game and wins the Game
+ * The score is updated and written to the File.
+ *
+ * Written by Nirmallya Kundu (nxk161830) at The University of Texas at Dallas
+ * starting April 20, 2018.
+ ******************************************************************************/
 
 public class Score {
 
@@ -31,6 +45,10 @@ public class Score {
 
     private Context context = null;
 
+    /**************************************************************************
+     * Constructor
+     *
+     **************************************************************************/
     private Score(Context context) {
         super();
 
@@ -41,6 +59,11 @@ public class Score {
         readScores();
     }
 
+    /**************************************************************************
+     * Method
+     * getInstance()
+     * Get the Singleton Class Object
+     **************************************************************************/
     public static Score getInstance(Context context) {
 
         if(score == null) {
@@ -50,6 +73,13 @@ public class Score {
         return score;
     }
 
+    /**************************************************************************
+     * Method
+     *
+     * readScores()
+     *
+     * This method reads Scores from the file
+     **************************************************************************/
     private void readScores() {
 
         BufferedReader objBufferedReader = null;
@@ -97,6 +127,11 @@ public class Score {
         rankPlayers();
     }
 
+    /**************************************************************************
+     * Method
+     * writeScores()
+     * This method writes scores to the file
+     **************************************************************************/
     private void writeScores() {
 
         try {
@@ -152,6 +187,12 @@ public class Score {
         }
     }
 
+    /**************************************************************************
+     * Method
+     * getPlayerRank()
+     *
+     * This method return the Player Rank
+     **************************************************************************/
     public int getPlayerRank(Player player) {
 
         int index = 0;
@@ -166,6 +207,11 @@ public class Score {
         return index+1;
     }
 
+    /**************************************************************************
+     * Method
+     * updatePlayer()
+     * This method updates the player Name
+     **************************************************************************/
     public void updatePlayer(int rank, Player player) {
 
         Player savedPlayer = lstScores.get(rank - 1);
@@ -178,6 +224,10 @@ public class Score {
         writeScores();
     }
 
+    /**************************************************************************
+     * Method
+     * Getters and Setters
+     **************************************************************************/
     public List<Player> getLstScores() {
         return lstScores;
     }

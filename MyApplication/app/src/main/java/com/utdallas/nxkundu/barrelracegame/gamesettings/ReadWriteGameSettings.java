@@ -2,9 +2,6 @@ package com.utdallas.nxkundu.barrelracegame.gamesettings;
 
 import android.content.Context;
 import android.graphics.Color;
-
-import com.utdallas.nxkundu.barrelracegame.playerinfo.Player;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -18,12 +15,31 @@ import java.io.OutputStreamWriter;
 /**
  * Created by nxkundu on 4/22/18.
  */
+/******************************************************************************
+ * Barrel Race Game
+ * This is an Android Game Application
+ *
+ * This Class Handles the
+ * READ
+ * WRITE
+ * function of the Game Settings
+ *
+ * Whenever a User Changes the Settings it is Updated
+ * and also written to the Settings file
+ *
+ * Written by Nirmallya Kundu (nxk161830) at The University of Texas at Dallas
+ * starting April 20, 2018.
+ ******************************************************************************/
 
 public class ReadWriteGameSettings {
 
     Context context;
     public static ReadWriteGameSettings readWriteGameSettings;
 
+    /**************************************************************************
+     * Constructor
+     *
+     **************************************************************************/
     private ReadWriteGameSettings(Context context) {
 
         super();
@@ -31,6 +47,11 @@ public class ReadWriteGameSettings {
         createFileIfNotExists();
     }
 
+    /**************************************************************************
+     * Method
+     * getInstance()
+     * get Singleton class Object
+     **************************************************************************/
     public static ReadWriteGameSettings getInstance(Context context) {
 
         if(readWriteGameSettings == null) {
@@ -40,6 +61,13 @@ public class ReadWriteGameSettings {
         return readWriteGameSettings;
     }
 
+    /**************************************************************************
+     * Method
+     *
+     * readGameSettings()
+     *
+     * This method reads Game Settings from the pre defined file
+     **************************************************************************/
     public void readGameSettings() {
 
         BufferedReader objBufferedReader = null;
@@ -111,6 +139,14 @@ public class ReadWriteGameSettings {
         }
     }
 
+    /**************************************************************************
+     * Method
+     *
+     * writeGameSettings()
+     *
+     * This methods writes Game Settings to file
+     * Whenever the user changes any Game Settings
+     **************************************************************************/
     public void writeGameSettings() {
 
         try {
@@ -166,6 +202,12 @@ public class ReadWriteGameSettings {
     }
 
 
+    /**************************************************************************
+     * Method
+     * createFileIfNotExists()
+     *
+     * This method Creates the GameSettings File if it is not present
+     **************************************************************************/
     private void createFileIfNotExists()  {
 
         File objFileDirs = new File(String.valueOf(context.getFilesDir()));

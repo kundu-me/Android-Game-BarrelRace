@@ -5,9 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -16,19 +13,45 @@ import com.utdallas.nxkundu.barrelracegame.playerinfo.Player;
 import com.utdallas.nxkundu.barrelracegame.scores.Score;
 
 import java.util.List;
+/******************************************************************************
+ * Barrel Race Game
+ * This is an Android Game Application
+ *
+ * This class reads the Top Score from the file
+ * and shows the Top Score on the file
+ * to be visible to the Players
+ * in a table Layout
+ *
+ * Written by Nirmallya Kundu (nxk161830) at The University of Texas at Dallas
+ * starting April 20, 2018.
+ ******************************************************************************/
 
 public class ScoreActivity extends AppCompatActivity {
 
     TableLayout tableViewScores = null;
 
+    /**************************************************************************
+     * Method
+     * Overriding onCreate method
+     *
+     **************************************************************************/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_score);
 
         tableViewScores = (TableLayout) findViewById(R.id.table_view_scores);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
 
+    /**************************************************************************
+     * Method
+     * Overriding the onStart() method
+     * to show all the top score received / read from the file
+     * in multiple TableRow
+     **************************************************************************/
     @Override
     protected void onStart() {
 
@@ -73,12 +96,20 @@ public class ScoreActivity extends AppCompatActivity {
 
     }
 
+    /**************************************************************************
+     * Method
+     *
+     **************************************************************************/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         return true;
     }
 
+    /**************************************************************************
+     * Method
+     *
+     **************************************************************************/
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -89,5 +120,29 @@ public class ScoreActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
 
         return super.onOptionsItemSelected(item);
+    }
+
+    /**************************************************************************
+     * Method
+     * Overriding onSupportNavigateUp()
+     * To make the appbar back button function
+     **************************************************************************/
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
+    /**************************************************************************
+     * Method
+     * Overriding onBackPressed()
+     * To make the back button custom function
+     *
+     **************************************************************************/
+    @Override
+    public void onBackPressed() {
+
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 }

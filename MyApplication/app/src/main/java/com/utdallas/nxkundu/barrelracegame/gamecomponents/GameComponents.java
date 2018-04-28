@@ -1,8 +1,5 @@
 package com.utdallas.nxkundu.barrelracegame.gamecomponents;
 
-import android.graphics.Canvas;
-
-import com.utdallas.nxkundu.barrelracegame.gamecomponents.Component;
 import com.utdallas.nxkundu.barrelracegame.gamesettings.GameSettings;
 
 import java.util.concurrent.ConcurrentHashMap;
@@ -11,6 +8,16 @@ import java.util.concurrent.ConcurrentMap;
 /**
  * Created by nxkundu on 4/20/18.
  */
+/******************************************************************************
+ * Barrel Race Game
+ * This is an Android Game Application
+ *
+ * This class creates of ALL the Components to be used in the Game
+ * and put those in a map
+ *
+ * Written by Nirmallya Kundu (nxk161830) at The University of Texas at Dallas
+ * starting April 20, 2018.
+ ******************************************************************************/
 
 public class GameComponents {
 
@@ -18,6 +25,10 @@ public class GameComponents {
     private float screenHeight;
     private float minWidthHeight;
 
+    /**************************************************************************
+     * Constructor
+     *
+     **************************************************************************/
     public GameComponents(float screenWidth, float screenHeight) {
 
         this.screenWidth = screenWidth;
@@ -26,6 +37,11 @@ public class GameComponents {
         this.minWidthHeight = Math.min(screenWidth, screenHeight);
     }
 
+    /**************************************************************************
+     * Method
+     * getGameComponents()
+     * This method returns the map of components that are used in the game
+     **************************************************************************/
     public ConcurrentMap<String, Component> getGameComponents() {
 
         ConcurrentMap<String, Component> mapComponents = new ConcurrentHashMap<>();

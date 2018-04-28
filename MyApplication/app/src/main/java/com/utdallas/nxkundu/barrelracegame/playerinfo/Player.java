@@ -8,6 +8,16 @@ import java.util.UUID;
 /**
  * Created by nxkundu on 4/21/18.
  */
+/******************************************************************************
+ * Barrel Race Game
+ * This is an Android Game Application
+ *
+ * This Class contains the Player Object
+ * Which we save when a Player wins and is within the Top 10 Rank
+ *
+ * Written by Nirmallya Kundu (nxk161830) at The University of Texas at Dallas
+ * starting April 20, 2018.
+ ******************************************************************************/
 
 public class Player implements Serializable, Comparable<Player>{
 
@@ -17,6 +27,10 @@ public class Player implements Serializable, Comparable<Player>{
     private String playerName;
     private String playerDate;
 
+    /**************************************************************************
+     * Constructor
+     *
+     **************************************************************************/
     public Player(String score) {
         super();
 
@@ -27,6 +41,10 @@ public class Player implements Serializable, Comparable<Player>{
     }
 
 
+    /**************************************************************************
+     * Constructor
+     *
+     **************************************************************************/
     public Player(String score, String playerName, String playerDate) {
         super();
 
@@ -36,16 +54,28 @@ public class Player implements Serializable, Comparable<Player>{
         this.playerDate = playerDate;
     }
 
+    /**************************************************************************
+     * Method
+     *
+     **************************************************************************/
     @Override
     public int compareTo(Player obj) {
         return (this.score).compareTo(obj.score);
     }
 
+    /**************************************************************************
+     * Method
+     *
+     **************************************************************************/
     @Override
     public String toString() {
         return  score + "\t" + playerName;
     }
 
+    /**************************************************************************
+     * Method
+     * Getters and Setters
+     **************************************************************************/
     public String toLine() {
         return score + "\t" + playerName;
     }

@@ -1,10 +1,7 @@
 package com.utdallas.nxkundu.barrelracegame.gamecomponents;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
 
 import com.utdallas.nxkundu.barrelracegame.gamesettings.GameSettings;
 
@@ -14,6 +11,24 @@ import java.util.concurrent.ConcurrentMap;
 /**
  * Created by nxkundu on 4/20/18.
  */
+/******************************************************************************
+ * Barrel Race Game
+ * This is an Android Game Application
+ *
+ * This class contains the basic Component Object which is common
+ * for all the Componenets to be used in the Game
+ *
+ * 1. Horse (1)
+ * 2. Barrel (3)
+ * 3. Course Top
+ * 4. Course Left
+ * 5. Course Right
+ * 5. Course Bottom Left
+ * 6. Course Bottom Right
+ *
+ * Written by Nirmallya Kundu (nxk161830) at The University of Texas at Dallas
+ * starting April 20, 2018.
+ ******************************************************************************/
 
 public class Component {
 
@@ -38,6 +53,9 @@ public class Component {
     public static final String COMPONENT_NAME_COURSE_RIGHT = "COURSE_RIGHT";
     public static final String COMPONENT_NAME_COURSE_TOP = "COURSE_TOP";
 
+    /***********************************************************
+     * This map Contains the Component specific settings
+     ***********************************************************/
     private ConcurrentMap<String, Integer> mapComponentSettings;
 
     private String componentType;
@@ -65,6 +83,10 @@ public class Component {
 
     private long timeLastUpdated;
 
+    /**************************************************************************
+     * Constructor
+     *
+     **************************************************************************/
     public Component(String componentType, String componentShape, String componentName) {
 
         this.componentType = componentType;
@@ -76,6 +98,12 @@ public class Component {
         this.timeLastUpdated = System.currentTimeMillis();
     }
 
+    /**************************************************************************
+     * Method
+     * drawComponent() -
+     * Draws the Component based on the shape of the component
+     * and the position values passed
+     **************************************************************************/
     public void drawComponent(Canvas canvas) {
 
         paint = new Paint();
@@ -120,6 +148,50 @@ public class Component {
         }
     }
 
+    /**************************************************************************
+     * Method
+     * updateComponent() -
+     * This method updates the position variables of any component
+     **************************************************************************/
+    public void updateComponent(long eventTimestamp, float accRate, float accX, float accY, float accZ) {
+
+        timeLastUpdated = eventTimestamp;
+        accelerationX = accX * accRate;
+        accelerationY = accY * accRate * 1.5f;
+        accelerationZ = accZ;
+
+        x1 += accelerationX;
+        y1 += accelerationY;
+
+        x2 += accelerationX;
+        y2 += accelerationY;
+
+        x1 = checkMinMax(x1, 0, xMax);
+        y1 = checkMinMax(y1, 0, yMax);
+
+        x2 = checkMinMax(x2, 0, xMax);
+        y2 = checkMinMax(y2, 0, yMax);
+
+        //System.out.println("(" + x1 + ", " + y1 + ")");
+    }
+
+    /**************************************************************************
+     * Method
+     * checkMinMax()
+     * This method is used to make the screen a square shaped
+     * takig the minimum of the screen width and height
+     **************************************************************************/
+    public float checkMinMax(float point, float pointMin, float pointMax) {
+
+        point = point < pointMin ? pointMin : point;
+        point = point > pointMax ? pointMax : point;
+        return point;
+    }
+
+    /**************************************************************************
+     * Method
+     * Getters and Setters
+     **************************************************************************/
     public float getX1() {
         return x1;
     }
@@ -254,34 +326,6 @@ public class Component {
 
     public void setYMax(float yMax) {
         this.yMax = yMax;
-    }
-
-    public void updateComponent(long eventTimestamp, float accRate, float accX, float accY, float accZ) {
-
-        timeLastUpdated = eventTimestamp;
-        accelerationX = accX * accRate;
-        accelerationY = accY * accRate * 1.5f;
-        accelerationZ = accZ;
-
-        x1 += accelerationX;
-        y1 += accelerationY;
-
-        x2 += accelerationX;
-        y2 += accelerationY;
-
-        x1 = checkMinMax(x1, 0, xMax);
-        y1 = checkMinMax(y1, 0, yMax);
-
-        x2 = checkMinMax(x2, 0, xMax);
-        y2 = checkMinMax(y2, 0, yMax);
-
-    }
-
-    public float checkMinMax(float point, float pointMin, float pointMax) {
-
-        point = point < pointMin ? pointMin : point;
-        point = point > pointMax ? pointMax : point;
-        return point;
     }
 
     public ConcurrentMap<String, Integer> getMapComponentSettings() {

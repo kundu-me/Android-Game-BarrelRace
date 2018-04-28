@@ -21,10 +21,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".HelpActivity" />
-        <activity android:name=".SettingsActivity" />
-        <activity android:name=".ScoreActivity" />
-        <activity android:name=".SuccessActivity" />
+        <activity android:name=".HelpActivity" android:label="@string/app_help" />
+        <activity android:name=".SettingsActivity"  android:label="@string/app_settings" />
+        <activity android:name=".ScoreActivity" android:label="@string/app_scores"/>
+        <activity android:name=".SuccessActivity" android:label="@string/app_success" />
     </application>
 
 </manifest>

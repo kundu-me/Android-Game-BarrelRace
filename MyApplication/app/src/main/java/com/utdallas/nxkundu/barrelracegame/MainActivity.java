@@ -22,19 +22,28 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-
 import com.utdallas.nxkundu.barrelracegame.gamecomponents.Component;
 import com.utdallas.nxkundu.barrelracegame.gamecomponents.GameComponents;
 import com.utdallas.nxkundu.barrelracegame.gamehandler.GameHandler;
 import com.utdallas.nxkundu.barrelracegame.gamesettings.GameSettings;
 import com.utdallas.nxkundu.barrelracegame.gamesettings.ReadWriteGameSettings;
-import com.utdallas.nxkundu.barrelracegame.playerinfo.Player;
 import com.utdallas.nxkundu.barrelracegame.scores.Score;
 import com.utdallas.nxkundu.barrelracegame.util.Util;
 
-import java.util.HashMap;
-import java.util.TreeMap;
 import java.util.concurrent.ConcurrentMap;
+/******************************************************************************
+ * Barrel Race Game
+ * This is an Android Game Application
+ *
+ * This is the Main Activity
+ * This is where the playing of the game is handled
+ *
+ * On Play - the sensor is registered and the horse movement is updated
+ * Also all the Game constraints are applied from this class
+ *
+ * Written by Nirmallya Kundu (nxk161830) at The University of Texas at Dallas
+ * starting April 20, 2018.
+ ******************************************************************************/
 
 public class MainActivity extends AppCompatActivity implements SurfaceHolder.Callback, SensorEventListener, View.OnClickListener {
 
@@ -61,8 +70,15 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
     private long gameProgressTimeBeforePaused = 0L;
     private boolean stopTimer = false;
 
+    AlertDialog alertDialogGamePaused = null;
+
     private final Handler handler = new Handler();
 
+    /**************************************************************************
+     * Method
+     * Initializing all the Game Components
+     * Drawing the Play Screen and all the Initialized Components
+     **************************************************************************/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,6 +115,10 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         textViewProgress.setVisibility(View.INVISIBLE);
     }
 
+    /**************************************************************************
+     * Method
+     * All the Menu options are initialized
+     **************************************************************************/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -108,33 +128,83 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         return true;
     }
 
+    /**************************************************************************
+     * Method
+     *
+     * This method handles the onclick on the icon on the app bar
+     * If the Game is in Progress
+     * it alerts the User that
+     * the game is in progress and whether the user wants to navigate to other page
+     * stopping the current Game
+     **************************************************************************/
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        final int id_item = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if(id == R.id.app_topscore) {
+        if(isGameProgress == false) {
 
-            Intent intent = new Intent(this, ScoreActivity.class);
-            startActivity(intent);
+            startIntentActivity(id_item);
         }
-        else if (id == R.id.app_settings) {
+        else {
 
-            Intent intent = new Intent(this, SettingsActivity.class);
-            startActivity(intent);
-        }
-        else if(id == R.id.app_help) {
+            gamePaused();
 
-            Intent intent = new Intent(this, HelpActivity.class);
-            startActivity(intent);
+            new AlertDialog.Builder(this)
+                    .setMessage("Game in progress. Do you want to still navigate?")
+                    .setCancelable(false)
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+
+                            if(alertDialogGamePaused != null) {
+                                alertDialogGamePaused.cancel();
+                            }
+
+                            startIntentActivity(id_item);
+                        }
+                    })
+                    .setNegativeButton("No", null)
+                    .show();
         }
 
         return super.onOptionsItemSelected(item);
     }
 
+    /**************************************************************************
+     * Method
+     *
+     * This method opens the page based on id
+     **************************************************************************/
+    private void startIntentActivity(int id) {
+
+        Intent intent = null;
+
+        if(id == R.id.app_topscore) {
+
+            intent = new Intent(this, ScoreActivity.class);
+
+        }
+        else if (id == R.id.app_settings) {
+
+            intent = new Intent(this, SettingsActivity.class);
+        }
+        else if(id == R.id.app_help) {
+
+            intent = new Intent(this, HelpActivity.class);
+        }
+
+        if(intent != null) {
+            startActivity(intent);
+        }
+    }
+
+    /**************************************************************************
+     * Method
+     * This is where the Game Components are drawn
+     **************************************************************************/
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
 
@@ -151,47 +221,121 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
 
     }
 
+    /**************************************************************************
+     * Method
+     * If the Game is in progress
+     * On resume resumes the Game after 5 sec automatically
+     * or give an option to manually resume the game
+     **************************************************************************/
     @Override
     protected void onResume() {
         super.onResume();
 
-        if(sensorManager != null && sensorAccelerometer != null && isGameProgress) {
-            sensorManager.registerListener(this, sensorAccelerometer, SensorManager.SENSOR_DELAY_GAME);
+        if(sensorManager != null && sensorAccelerometer != null) {
+            //sensorManager.registerListener(this, sensorAccelerometer, SensorManager.SENSOR_DELAY_GAME);
+
+            updateOnStartOrResume();
         }
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        if(sensorManager != null) {
-            sensorManager.unregisterListener(this);
-        }
-    }
-
+    /**************************************************************************
+     * Method
+     * If the Game is in progress
+     * On start resumes the Game after 5 sec automatically
+     * or give an option to manually resume the game
+     **************************************************************************/
     @Override
     protected void onStart() {
         super.onStart();
 
-        if(sensorManager != null && sensorAccelerometer != null && isGameProgress) {
-            sensorManager.registerListener(this, sensorAccelerometer, SensorManager.SENSOR_DELAY_GAME);
+        if(sensorManager != null && sensorAccelerometer != null) {
+            //sensorManager.registerListener(this, sensorAccelerometer, SensorManager.SENSOR_DELAY_GAME);
+
+            updateOnStartOrResume();
         }
     }
 
+    /**************************************************************************
+     * Method
+     *
+     * (Game is Resumed)
+     * After 5 sec of Delay
+     * or a by the manual option given to the player
+     * *************************************************************************/
+    private void updateOnStartOrResume() {
+
+        if(alertDialogGamePaused != null) {
+
+            handler.postDelayed(resumeGameThread, 5000);
+        }
+    }
+
+    /**************************************************************************
+     * Method
+     *
+     * Unregistering the Sensor on Pause (Game is Paused)
+     **************************************************************************/
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if(sensorManager != null && isGameProgress) {
+            //sensorManager.unregisterListener(this);
+
+            gamePaused();
+        }
+    }
+
+    /**************************************************************************
+     * Method
+     *
+     * Unregistering the Sensor on Stop (Game is Paused)
+     **************************************************************************/
     @Override
     protected void onStop() {
         super.onStop();
 
-        if(sensorManager != null) {
-            sensorManager.unregisterListener(this);
+        if(sensorManager != null && isGameProgress) {
+            //sensorManager.unregisterListener(this);
+
+            gamePaused();
         }
     }
 
+    /**************************************************************************
+     * Method
+     *
+     * resumeGameThread
+     *
+     * Resumes the Game automatically
+     *
+     **************************************************************************/
+    private Runnable resumeGameThread = new Runnable() {
+
+        @Override
+        public void run() {
+
+            if(alertDialogGamePaused != null) {
+
+                alertDialogGamePaused.cancel();
+                gamePlayorResume();
+            }
+        }
+
+    };
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
     }
 
+    /**************************************************************************
+     * Method
+     *
+     * As we get the values from the sensor
+     * All the Game components are redrawn
+     * The Horse movement is updated
+     * All the Game Constraints are applied
+     **************************************************************************/
     @Override
     public void onSensorChanged(SensorEvent event) {
 
@@ -203,7 +347,9 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
             float accelerationY = event.values[1];
             float accelerationZ = event.values[2];
 
-            long eventTimestamp = event.timestamp;
+            //System.out.println("accelerationX=" + accelerationX + ", accelerationY=" + accelerationY);
+
+            long eventTimestamp = System.currentTimeMillis();
 
             if(isGameProgress) {
 
@@ -250,11 +396,24 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         }
     }
 
+    /**************************************************************************
+     * Method
+     *
+     * This method updates the Game Completion percentage on screen
+     *
+     **************************************************************************/
     private void updateGameProgress(int gameProgressPercentage) {
 
         textViewProgress.setText("" + gameProgressPercentage + "% Completed");
     }
 
+    /**************************************************************************
+     * Method
+     *
+     * Updates the clock
+     * on the bottom of the screen
+     * as the Game is in progress
+     **************************************************************************/
     private Runnable updateTimerThread = new Runnable() {
 
         @Override
@@ -277,6 +436,11 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
 
     };
 
+    /**************************************************************************
+     * Method
+     *
+     * This method handles the Game Play pause  reset click
+     **************************************************************************/
     @Override
     public void onClick(View view) {
 
@@ -286,37 +450,91 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
 
                 if(buttonPlayPause.getText().equals(GameSettings.LABEL_PLAY)) {
 
-                    isGameProgress = true;
-                    buttonPlayPause.setText(GameSettings.LABEL_PAUSE);
-                    textViewProgress.setVisibility(View.VISIBLE);
-
-                    sensorManager.registerListener(this, sensorAccelerometer, SensorManager.SENSOR_DELAY_GAME);
-
-                    gameStartTimestamp = SystemClock.uptimeMillis();
-                    handler.postDelayed(updateTimerThread, 0);
+                   gamePlayorResume();
                 }
                 else {
 
-                    isGameProgress = false;
-                    buttonPlayPause.setText(GameSettings.LABEL_PLAY);
+                    gamePaused();
 
-                    sensorManager.unregisterListener(this);
-
-                    gameProgressTimeBeforePaused += gameProgressCurrentTime;
-                    handler.removeCallbacks(updateTimerThread);
                 }
 
                 break;
 
             case R.id.buttonReset:
 
-                restartGame();
+                if(isGameProgress) {
+                    gamePaused();
+                }
+
+                new AlertDialog.Builder(this)
+                        .setMessage("Are you sure you want to restart?")
+                        .setCancelable(false)
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+
+                                if(alertDialogGamePaused != null) {
+                                    alertDialogGamePaused.cancel();
+                                }
+
+                                restartGame();
+                            }
+                        })
+                        .setNegativeButton("No", null)
+                        .show();
 
                 break;
 
         }
     }
 
+    /**************************************************************************
+     * Method
+     * This method Starts the Game or Resumes the Paused Game
+     **************************************************************************/
+    public void gamePlayorResume() {
+
+        System.out.println("Game Started... ");
+
+        isGameProgress = true;
+        buttonPlayPause.setText(GameSettings.LABEL_PAUSE);
+        textViewProgress.setVisibility(View.VISIBLE);
+
+        sensorManager.registerListener(this, sensorAccelerometer, SensorManager.SENSOR_DELAY_GAME);
+
+        gameStartTimestamp = SystemClock.uptimeMillis();
+        handler.postDelayed(updateTimerThread, 0);
+    }
+
+    /**************************************************************************
+     * Method
+     * This method Pause Game
+     **************************************************************************/
+    private void gamePaused() {
+
+        isGameProgress = false;
+        buttonPlayPause.setText(GameSettings.LABEL_PLAY);
+
+        sensorManager.unregisterListener(this);
+
+        gameProgressTimeBeforePaused += gameProgressCurrentTime;
+        handler.removeCallbacks(updateTimerThread);
+
+        alertDialogGamePaused = new AlertDialog.Builder(this)
+                .setMessage("Game Paused !")
+                .setCancelable(false)
+                .setPositiveButton("Resume", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        gamePlayorResume();
+                    }
+                })
+                .show();
+    }
+
+    /**************************************************************************
+     * Method
+     * This method restart the Game
+     **************************************************************************/
     public void restartGame() {
 
         buttonPlayPause.setText(GameSettings.LABEL_PLAY);
@@ -344,6 +562,10 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         startActivity(intent);
     }
 
+    /**************************************************************************
+     * Method
+     * This method exits the game
+     **************************************************************************/
     public void exitGame() {
 
         Intent intent = new Intent(Intent.ACTION_MAIN);
@@ -354,8 +576,20 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         System.exit(0);
     }
 
+    /**************************************************************************
+     * Method
+     *
+     * On Back Press closes the Screen
+     * if the Game is not in Progress then asks the user whether to close
+     * else
+     * Pauses the Game and then asks the user whether to close
+     **************************************************************************/
     @Override
     public void onBackPressed() {
+
+        if(isGameProgress) {
+            gamePaused();
+        }
 
         new AlertDialog.Builder(this)
                 .setMessage("Are you sure you want to exit?")
@@ -370,6 +604,11 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
                 .show();
     }
 
+    /**************************************************************************
+     * Method
+     *
+     * This method shows the Game Over Options
+     **************************************************************************/
     public void gameover() {
 
         new AlertDialog.Builder(this)

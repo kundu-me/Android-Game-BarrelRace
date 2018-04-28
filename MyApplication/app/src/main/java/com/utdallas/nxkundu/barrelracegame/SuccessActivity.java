@@ -11,6 +11,19 @@ import android.widget.Toast;
 import com.utdallas.nxkundu.barrelracegame.gamesettings.GameSettings;
 import com.utdallas.nxkundu.barrelracegame.playerinfo.Player;
 import com.utdallas.nxkundu.barrelracegame.scores.Score;
+/******************************************************************************
+ * Barrel Race Game
+ * This is an Android Game Application
+ *
+ * This Class helps Updating the Player
+ * about their Rank and time taken to Complete the Game
+ *
+ * Also updates the Player name
+ * and save that to  file
+ *
+ * Written by Nirmallya Kundu (nxk161830) at The University of Texas at Dallas
+ * starting April 20, 2018.
+ ******************************************************************************/
 
 public class SuccessActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -21,6 +34,14 @@ public class SuccessActivity extends AppCompatActivity implements View.OnClickLi
     private Player player;
     private int rank;
 
+    /**************************************************************************
+     * Method
+     * Overriding onCreate method
+     *
+     * Displays the player time to complete the Game
+     * from the intent passed
+     * and the computed Rank
+     **************************************************************************/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,8 +65,17 @@ public class SuccessActivity extends AppCompatActivity implements View.OnClickLi
         rank = score.getPlayerRank(player);
         textViewSuccessRankValue.setText(String.valueOf(rank));
         textViewSuccessScoreValue.setText(String.valueOf(playerScore));
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
 
+    /**************************************************************************
+     * Method
+     *
+     * This methods Save the the Updated Player Name
+     * or Cancel Saving/ Updating Player name based on the user input
+     **************************************************************************/
     @Override
     public void onClick(View view) {
 
@@ -83,4 +113,27 @@ public class SuccessActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
+    /**************************************************************************
+     * Method
+     * Overriding onSupportNavigateUp()
+     * To make the appbar back button function
+     **************************************************************************/
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
+    /**************************************************************************
+     * Method
+     * Overriding onBackPressed()
+     * To make the back button custom function
+     *
+     **************************************************************************/
+    @Override
+    public void onBackPressed() {
+
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
 }

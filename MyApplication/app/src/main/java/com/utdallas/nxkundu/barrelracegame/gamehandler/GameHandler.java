@@ -1,8 +1,6 @@
 package com.utdallas.nxkundu.barrelracegame.gamehandler;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.os.Vibrator;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -15,6 +13,17 @@ import java.util.concurrent.ConcurrentMap;
 /**
  * Created by nxkundu on 4/21/18.
  */
+/******************************************************************************
+ * Barrel Race Game
+ * This is an Android Game Application
+ *
+ * This is the Main Class which Handles all the Game Properties
+ * starting from drawing, redrawing, updating components positions,
+ * deciding on the game factors
+ *
+ * Written by Nirmallya Kundu (nxk161830) at The University of Texas at Dallas
+ * starting April 20, 2018.
+ ******************************************************************************/
 
 public class GameHandler {
 
@@ -33,6 +42,10 @@ public class GameHandler {
     private boolean isBarrelTouched = false;
     private boolean isCourseTouched = false;
 
+    /**************************************************************************
+     * Constructor
+     *
+     **************************************************************************/
     public GameHandler(ConcurrentMap<String, Component> mapGameComponents) {
 
         super();
@@ -40,6 +53,12 @@ public class GameHandler {
         this.mapBarrelBoundaryCrossed = new ConcurrentHashMap<>();
     }
 
+    /**************************************************************************
+     * Method
+     * drawComponents()
+     *
+     * draws all the Components in the map
+     **************************************************************************/
     public void drawComponents(Canvas canvas) {
 
         if(mapGameComponents == null || mapGameComponents.size() == 0) {
@@ -57,6 +76,12 @@ public class GameHandler {
 
     }
 
+    /**************************************************************************
+     * Method
+     * drawGameComponents()
+     * This method basically calls the overloaded method drawGameComponents()
+     * by passing the Canvas object
+     **************************************************************************/
     public void drawGameComponents(SurfaceHolder surfaceHolder) {
 
         Canvas canvas = null;
@@ -80,6 +105,14 @@ public class GameHandler {
         }
     }
 
+    /**************************************************************************
+     * Method
+     * handleHorseMovement()
+     * This method handles the horse motion on the screen
+     * Basically, redraws the horse component on every update from
+     * the sensor
+     * Also checks for all the game properties/constraints
+     **************************************************************************/
     public void handleHorseMovement(SurfaceView surfaceViewPlayArea,
                                     long eventTimestamp, float accelerationX, float accelerationY, float accelerationZ) {
 
@@ -100,7 +133,9 @@ public class GameHandler {
 
         long diffTime = (eventTimestamp - componentHorse.getTimeLastUpdated());
 
-        if (diffTime > 100) {
+        //System.out.print("diffTime = " + diffTime);
+
+        if (diffTime > 10) {
 
             componentHorse.updateComponent(eventTimestamp, GameSettings.ACCELEROMETER_RATE,
                     accelerationX, accelerationY, accelerationZ);
@@ -149,6 +184,12 @@ public class GameHandler {
         }
     }
 
+    /**************************************************************************
+     * Method
+     * isAnyBarrelTouched()
+     * This method checks whether the horse movement
+     * touched or intersect any Barrel Component
+     **************************************************************************/
     private boolean isAnyBarrelTouched() {
 
 
@@ -183,6 +224,27 @@ public class GameHandler {
         return false;
     }
 
+    /**************************************************************************
+     * Method
+     * updateMapBarrelBoundaryCrossed()
+     * This method updates the map or put in the map
+     * as soon as a Barrel Direction is crossed
+     *
+     * EACH Barrel has 4 IMAGINARY LINES with a varialble length
+     * East
+     * West
+     * North
+     * South
+     * Total = 3 Barrel * 4 Lines = 12 Lines
+     * As soon as the Horse crosses each Line
+     * that is updated in the map
+     *
+     * When all the 4 Lines of a Barrel is crossed
+     * then that Barrel is completed rounding
+     *
+     * As soon as the Horse crosses 12 lines, the game is almost complete
+     * it just need to go to the start position back
+     **************************************************************************/
     private void updateMapBarrelBoundaryCrossed() {
 
         checkBarrelBoundaryCrossed(Component.COMPONENT_NAME_BARREL_1);
@@ -190,6 +252,27 @@ public class GameHandler {
         checkBarrelBoundaryCrossed(Component.COMPONENT_NAME_BARREL_3);
     }
 
+    /**************************************************************************
+     * Method
+     * checkBarrelBoundaryCrossed()
+     * This method updates the map or put in the map
+     * as soon as a Barrel Direction is crossed
+     *
+     * EACH Barrel has 4 IMAGINARY LINES with a varialble length
+     * East
+     * West
+     * North
+     * South
+     * Total = 3 Barrel * 4 Lines = 12 Lines
+     * As soon as the Horse crosses each Line
+     * that is updated in the map
+     *
+     * When all the 4 Lines of a Barrel is crossed
+     * then that Barrel is completed rounding
+     *
+     * As soon as the Horse crosses 12 lines, the game is almost complete
+     * it just need to go to the start position back
+     **************************************************************************/
     private void checkBarrelBoundaryCrossed(String componentNameBarrel) {
 
         Component componentHorse = mapGameComponents.get(Component.COMPONENT_NAME_HORSE_1);
@@ -263,6 +346,12 @@ public class GameHandler {
 
     }
 
+    /**************************************************************************
+     * Method
+     * updateCountBarrelCompleted()
+     *
+     * This method looks for how many Barrels are completed till now
+     **************************************************************************/
     private void updateCountBarrelCompleted(Component barrel) {
 
         int countBarrelCompleted = 0;
@@ -274,6 +363,15 @@ public class GameHandler {
         barrel.getMapComponentSettings().put(Component.COMPONENT_SETTINGS_BARREL_ROUND_COMPLETED, ++countBarrelCompleted);
     }
 
+    /**************************************************************************
+     * Method
+     *
+     * isCirclesIntersect()
+     *
+     * Since both the horse and Barrel are Circle
+     * We need the Circle intersection formula to detect
+     * whether the horse touched or intersect the Barrels
+     **************************************************************************/
     private boolean isCirclesIntersect(float x1, float y1, float x2, float y2,
                                       float radius1, float radius2) {
 
@@ -288,6 +386,12 @@ public class GameHandler {
         }
     }
 
+    /**************************************************************************
+     * Method
+     * isAnyCourseTouched()
+     *
+     * This method checks whether any of the Course Lines are touched
+     **************************************************************************/
     private boolean isAnyCourseTouched() {
 
         Component componentHorse = mapGameComponents.get(Component.COMPONENT_NAME_HORSE_1);
@@ -345,6 +449,32 @@ public class GameHandler {
         return false;
     }
 
+    /**************************************************************************
+     * Method
+     * getGameProgressPercentage()
+     *
+     * This method calculates the percentage of game completed based on task
+     *
+     * Here :
+     * As discussed above we need to round 3 Barrels (or intersect 12 lines)
+     * + return to start position = 13 task
+     *
+     * Based on this, the current game completion percentage is calculated
+     **************************************************************************/
+    public int getGameProgressPercentage() {
+
+        int countBarrelBoundaryCrossed = mapBarrelBoundaryCrossed.size();
+        int percentageBarrelBoundaryCrossed = (int) (countBarrelBoundaryCrossed * 100) / 13;
+
+        percentageBarrelBoundaryCrossed = (percentageBarrelBoundaryCrossed < 1) ? 1 : percentageBarrelBoundaryCrossed;
+        return percentageBarrelBoundaryCrossed;
+    }
+
+    /**************************************************************************
+     * Method
+     * Getters and Setters
+     **************************************************************************/
+
     public boolean isGameCompleted() {
         return isGameCompleted;
     }
@@ -367,14 +497,5 @@ public class GameHandler {
 
     public void setMapGameComponents(ConcurrentMap<String, Component> mapGameComponents) {
         this.mapGameComponents = mapGameComponents;
-    }
-
-    public int getGameProgressPercentage() {
-
-        int countBarrelBoundaryCrossed = mapBarrelBoundaryCrossed.size();
-        int percentageBarrelBoundaryCrossed = (int) (countBarrelBoundaryCrossed * 100) / 13;
-
-        percentageBarrelBoundaryCrossed = (percentageBarrelBoundaryCrossed < 1) ? 1 : percentageBarrelBoundaryCrossed;
-        return percentageBarrelBoundaryCrossed;
     }
 }

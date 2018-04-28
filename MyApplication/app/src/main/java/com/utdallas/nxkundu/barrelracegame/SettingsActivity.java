@@ -13,6 +13,26 @@ import android.widget.Toast;
 
 import com.utdallas.nxkundu.barrelracegame.gamesettings.GameSettings;
 import com.utdallas.nxkundu.barrelracegame.gamesettings.ReadWriteGameSettings;
+/******************************************************************************
+ * Barrel Race Game
+ * This is an Android Game Application
+ *
+ * This class handles the Game Settings
+ * This class helps in reading the settings from the
+ * Settings file
+ * And writing the updated settings to the
+ * Settings File
+ *
+ * Whenever the user changes anything on the Settings Page
+ * It is auto saved in the file
+ *
+ * So that when the user comes back tyo Game again
+ * they do not need to change the settings everytime
+ * and their preferred Settings is saved
+ *
+ * Written by Nirmallya Kundu (nxk161830) at The University of Texas at Dallas
+ * starting April 20, 2018.
+ ******************************************************************************/
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -20,6 +40,15 @@ public class SettingsActivity extends AppCompatActivity {
     private RadioGroup radioGroupBarrel;
     private RadioGroup radioGroupLevel;
 
+    /**************************************************************************
+     * Method
+     *
+     * Overriding onCreate method
+     *
+     * This method handles initializing all the Game Settings
+     * read from the Settings File
+     * and make it visible to the User
+     **************************************************************************/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +67,7 @@ public class SettingsActivity extends AppCompatActivity {
             public void onCheckedChanged(RadioGroup radioGroup, @IdRes int i) {
 
                 updateHorseColor();
+                ReadWriteGameSettings.getInstance(SettingsActivity.this).writeGameSettings();
                 Toast.makeText(getBaseContext(), GameSettings.LABEL_SAVED_SUCCESSFULLY, Toast.LENGTH_SHORT).show();
             }
         });
@@ -52,16 +82,6 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
-        radioGroupHorse.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, @IdRes int i) {
-
-                updateHorseColor();
-                ReadWriteGameSettings.getInstance(SettingsActivity.this).writeGameSettings();
-                Toast.makeText(getBaseContext(), GameSettings.LABEL_SAVED_SUCCESSFULLY, Toast.LENGTH_SHORT).show();
-            }
-        });
-
         radioGroupLevel.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, @IdRes int i) {
@@ -71,8 +91,17 @@ public class SettingsActivity extends AppCompatActivity {
                 Toast.makeText(getBaseContext(), GameSettings.LABEL_SAVED_SUCCESSFULLY, Toast.LENGTH_SHORT).show();
             }
         });
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
 
+    /**************************************************************************
+     * Method
+     *
+     * Whenever the user changes the horse color this method is called
+     * Which updates the Horse color and also Write it to file
+     **************************************************************************/
     private void updateHorseColor() {
 
         final String value = ((RadioButton)findViewById(radioGroupHorse.getCheckedRadioButtonId())).getText().toString();
@@ -88,6 +117,12 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
+    /**************************************************************************
+     * Method
+     *
+     * Whenever the user changes the Barrel color this method is called
+     * Which updates the Barrel color and also Write it to file
+     **************************************************************************/
     private void updateBarrelColor() {
 
         final String value = ((RadioButton)findViewById(radioGroupBarrel.getCheckedRadioButtonId())).getText().toString();
@@ -103,6 +138,12 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
+    /**************************************************************************
+     * Method
+     *
+     * Whenever the user changes the Game Level  this method is called
+     * Which updates the Game Level and also Write it to file
+     **************************************************************************/
     private void updateGameLevel() {
 
         final String value = ((RadioButton)findViewById(radioGroupLevel.getCheckedRadioButtonId())).getText().toString();
@@ -118,7 +159,14 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
-    private  void checkCurrentHorse() {
+    /**************************************************************************
+     * Method
+     *
+     * This method updates the current Horse color
+     * on the Settings Page
+     * based on the user settings file
+     **************************************************************************/
+    private void checkCurrentHorse() {
 
         if(Color.GREEN == GameSettings.HORSE_COLOR) {
             radioGroupHorse.check(R.id.radioButtonHorseGreen);
@@ -131,6 +179,13 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
+    /**************************************************************************
+     * Method
+     *
+     * This method updates the current Barrel color
+     * on the Settings Page
+     * based on the user settings file
+     **************************************************************************/
     private  void checkCurrentBarrel() {
 
         if(Color.RED == GameSettings.BARREL_COLOR) {
@@ -144,6 +199,13 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
+    /**************************************************************************
+     * Method
+     *
+     * This method updates the current Game Level
+     * on the Settings Page
+     * based on the user settings file
+     **************************************************************************/
     private void checkCurrentGameLevel() {
 
         if(GameSettings.ACCELEROMETER_RATE < 1.5) {
@@ -157,12 +219,20 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
+    /**************************************************************************
+     * Method
+     *
+     **************************************************************************/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         return true;
     }
 
+    /**************************************************************************
+     * Method
+     *
+     **************************************************************************/
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -173,5 +243,29 @@ public class SettingsActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
 
         return super.onOptionsItemSelected(item);
+    }
+
+    /**************************************************************************
+     * Method
+     * Overriding onSupportNavigateUp()
+     * To make the appbar back button function
+     **************************************************************************/
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
+    /**************************************************************************
+     * Method
+     * Overriding onBackPressed()
+     * To make the back button custom function
+     *
+     **************************************************************************/
+    @Override
+    public void onBackPressed() {
+
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 }
