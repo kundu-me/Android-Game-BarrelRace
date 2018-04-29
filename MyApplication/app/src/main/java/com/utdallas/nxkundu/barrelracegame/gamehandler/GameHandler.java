@@ -435,6 +435,12 @@ public class GameHandler {
             return true;
         }
 
+        if(y1Horse + GameSettings.HORSE_RADIUS >= course.getY1() - GameSettings.COURSE_LINE_WIDTH
+                && x1Horse - GameSettings.HORSE_RADIUS <= course.getX2()) {
+
+            return true;
+        }
+
         /**
          * BOTTOM RIGHT
          */
@@ -445,6 +451,11 @@ public class GameHandler {
             return true;
         }
 
+        if(y1Horse + GameSettings.HORSE_RADIUS >= course.getY1() - GameSettings.COURSE_LINE_WIDTH
+                && x1Horse + GameSettings.HORSE_RADIUS >= course.getX1()) {
+
+            return true;
+        }
 
         return false;
     }

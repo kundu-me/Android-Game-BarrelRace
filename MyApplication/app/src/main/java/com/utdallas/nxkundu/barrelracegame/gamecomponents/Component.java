@@ -179,8 +179,11 @@ public class Component {
     /**************************************************************************
      * Method
      * checkMinMax()
-     * This method is used to make the screen a square shaped
-     * takig the minimum of the screen width and height
+     * This method is used to make the point within
+     * the screen
+     * taking the point coordinate
+     * between minimum of the screen width and height
+     * and maximum of the screen width and height
      **************************************************************************/
     public float checkMinMax(float point, float pointMin, float pointMax) {
 
