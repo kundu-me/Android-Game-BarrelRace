@@ -155,18 +155,37 @@ public class Score {
         }
     }
 
+    /**************************************************************************
+     * Method
+     * addScore()
+     * This method add the new player scores to the list
+     **************************************************************************/
     public void addScore(Player player) {
 
+        if(lstScores.size() > GameSettings.MAX_COUNT_SCORES) {
+            lstScores.remove(GameSettings.MAX_COUNT_SCORES);
+        }
         lstScores.add(player);
         rankPlayers();
         writeScores();
     }
 
+    /**************************************************************************
+     * Method
+     * rankPlayers()
+     * This method sorts the list based on the
+     * Override comapreTo method in class Player
+     **************************************************************************/
     private void rankPlayers() {
 
         Collections.sort(lstScores);
     }
 
+    /**************************************************************************
+     * Method
+     * createFileIfNotExists()
+     * This method creates the Score File If not exists
+     **************************************************************************/
     private void createFileIfNotExists()  {
 
         File objFileDirs = new File(String.valueOf(context.getFilesDir()));

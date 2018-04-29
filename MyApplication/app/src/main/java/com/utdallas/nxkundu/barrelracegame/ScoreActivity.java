@@ -9,6 +9,7 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.utdallas.nxkundu.barrelracegame.gamesettings.GameSettings;
 import com.utdallas.nxkundu.barrelracegame.playerinfo.Player;
 import com.utdallas.nxkundu.barrelracegame.scores.Score;
 
@@ -71,7 +72,7 @@ public class ScoreActivity extends AppCompatActivity {
                     TableLayout.LayoutParams.WRAP_CONTENT));
 
             TextView textViewRank = new TextView(this);
-            textViewRank.setText(String.valueOf(rank));
+            textViewRank.setText(String.valueOf(rank > GameSettings.MAX_COUNT_SCORES? "Last" : rank));
             textViewRank.setWidth(80);
             textViewRank.setPadding(0, 10, 0, 10);
             textViewRank.setTextSize(20);

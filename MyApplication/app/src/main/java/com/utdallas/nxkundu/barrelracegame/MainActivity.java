@@ -470,7 +470,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
                 }
 
                 new AlertDialog.Builder(this)
-                        .setMessage("Are you sure you want to restart?")
+                        .setMessage("Are you sure you want to restart game?")
                         .setCancelable(false)
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
@@ -596,7 +596,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         }
 
         new AlertDialog.Builder(this)
-                .setMessage("Are you sure you want to exit?")
+                .setMessage("Are you sure you want to exit game?")
                 .setCancelable(false)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
@@ -618,13 +618,13 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         new AlertDialog.Builder(this)
                 .setMessage("Game Over! You touched the barrel")
                 .setCancelable(false)
-                .setPositiveButton("Restart", new DialogInterface.OnClickListener() {
+                .setPositiveButton("New Game", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
 
                         restartGame();
                     }
                 })
-                .setNegativeButton("Exit", new DialogInterface.OnClickListener() {
+                .setNegativeButton("Exit Game", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
 
                         exitGame();

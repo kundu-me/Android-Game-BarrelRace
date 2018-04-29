@@ -22,6 +22,7 @@
     <string name="button_play">Play</string>
     <string name="button_pause">Pause</string>
     <string name="button_reset">Reset</string>
+    <string name="button_restart">New Game</string>
     <string name="label_rank">Rank</string>
     <string name="label_score">Time</string>
     <string name="label_player">Player Name</string>
